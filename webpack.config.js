@@ -1,6 +1,8 @@
+var path = require('path');
 var webpack = require('webpack');
 
 module.exports = {
+    devtool: 'cheap-module-eval-source-map',
     entry: [
         'webpack-hot-middleware/client',
         './src/index.js'
@@ -15,7 +17,8 @@ module.exports = {
         {
           test: /\.js(x)?$/,
           exclude: /node_modules/,
-          loader: 'react-hot!babel'
+          loader: 'babel',
+          include: path.join(__dirname, 'src')
         }
         ]
     },
@@ -23,6 +26,7 @@ module.exports = {
       extensions: ['', '.js', '.jsx']
     },
     plugins: [
-        new webpack.HotModuleReplacementPlugin()
+        new webpack.HotModuleReplacementPlugin(),
+        new webpack.NoErrorsPlugin()
     ]
 };
