@@ -6,6 +6,7 @@
   "scripts": {
     "test": "mocha --compilers js:babel-core/register --require ./test/test_helper.js 'test/**/*.@(js|jsx)'",
     "test:watch": "npm run test -- --watch",
+    "devtest": "webpack-dev-server --port 3001 --hot --colors --config webpack.test.config.js",
     "dev": "node server.js"
   },
   "repository": "duncan60/react-unit-testing",
@@ -22,11 +23,13 @@
     "express": "^4.13.4",
     "jsdom": "^3.1.2",
     "mocha": "^2.4.5",
+    "mocha-loader": "^0.7.1",
     "react-addons": "^0.9.1-deprecated",
     "react-addons-test-utils": "^0.14.7",
     "react-transform-hmr": "^1.0.2",
     "webpack": "^1.12.13",
     "webpack-dev-middleware": "^1.5.1",
+    "webpack-dev-server": "^1.14.1",
     "webpack-hot-middleware": "^2.7.1"
   },
   "dependencies": {

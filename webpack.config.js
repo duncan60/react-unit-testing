@@ -14,16 +14,24 @@ module.exports = {
     },
     module: {
         loaders: [
-        {
-          test: /\.js(x)?$/,
-          exclude: /node_modules/,
-          loader: 'babel',
-          include: path.join(__dirname, 'src')
-        }
+            {
+                test: /\.js(x)?$/,
+                exclude: /node_modules/,
+                loader: 'babel',
+                include: path.join(__dirname, 'src'),
+                query: {
+                    presets: ['react','es2015', 'stage-0'],
+                    env: {
+                        development: {
+                            presets: ['react-hmre']
+                        }
+                    }
+                }
+            }
         ]
     },
     resolve: {
-      extensions: ['', '.js', '.jsx']
+        extensions: ['', '.js', '.jsx']
     },
     plugins: [
         new webpack.HotModuleReplacementPlugin(),
