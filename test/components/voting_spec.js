@@ -5,9 +5,9 @@ import { expect } from 'chai';
 
 import Voting from '../../src/components/voting';
 
-const { renderIntoDocument, scryRenderedDOMComponentsWithTag, Simulate } = TestUtils;
+const { renderIntoDocument, scryRenderedDOMComponentsWithTag, Simulate, createRenderer } = TestUtils;
 
-describe('Voting', () => {
+describe('renderIntoDocument testing', () => {
     it('renders a pair of buttons', () =>{
         const component = renderIntoDocument(
             <Voting pair={["Trainspotting", "28 Days Later"]} />
@@ -15,8 +15,8 @@ describe('Voting', () => {
         const buttons = scryRenderedDOMComponentsWithTag(component, 'button');
 
         expect(buttons.length).to.equal(2);
-        expect(buttons[0].getDOMNode().textContent).to.equal('Trainspotting');
-        expect(buttons[1].getDOMNode().textContent).to.equal('28 Days Later');
+        expect(findDOMNode(buttons[0]).textContent).to.equal('Trainspotting');
+        expect(findDOMNode(buttons[1]).textContent).to.equal('28 Days Later');
     });
 
     it('invokes callback when a button is clicked', () => {
@@ -28,7 +28,7 @@ describe('Voting', () => {
                 vote={vote}/>
         );
         const buttons = scryRenderedDOMComponentsWithTag(component, 'button');
-        Simulate.click(buttons[0].getDOMNode());
+        Simulate.click(findDOMNode(buttons[0]));
         expect(votedWith).to.equal('Trainspotting');
     });
 
@@ -41,8 +41,8 @@ describe('Voting', () => {
         const buttons = scryRenderedDOMComponentsWithTag(component, 'button');
 
         expect(buttons.length).to.equal(2);
-        expect(buttons[0].getDOMNode().hasAttribute('disabled')).to.equal(true);
-        expect(buttons[1].getDOMNode().hasAttribute('disabled')).to.equal(true);
+        expect(findDOMNode(buttons[0]).hasAttribute('disabled')).to.equal(true);
+        expect(findDOMNode(buttons[1]).hasAttribute('disabled')).to.equal(true);
     });
 
     it('adds label to the voted entry', () => {
@@ -53,7 +53,7 @@ describe('Voting', () => {
         );
         const buttons = scryRenderedDOMComponentsWithTag(component, 'button');
 
-        expect(buttons[0].getDOMNode().textContent).to.contain('Voted');
+        expect(findDOMNode(buttons[0]).textContent).to.contain('Voted');
     });
 
     it('renders just the winner when there is one', () => {
@@ -65,7 +65,17 @@ describe('Voting', () => {
 
         const winner = findDOMNode(component.refs.winner);
         expect(winner).to.be.ok;
-        console.log('winner.textContent>>>>', winner.textContent);
         expect(winner.textContent).to.equal('winner is Trainspotting');
     });
 });
+
+describe('Shallow Rendering', () => {
+    it('renders a pair of buttons', () =>{
+        const renderer = createRenderer();
+        renderer.render(<Voting pair={["Trainspotting", "28 Days Later"]} />);
+        const component = renderer.getRenderOutput();
+        const childrenPair = component.props.children.props.pair;
+        expect(childrenPair.length).to.equal(2);
+        expect(childrenPair).to.deep.equal(["Trainspotting", "28 Days Later"]);
+    });
+})
