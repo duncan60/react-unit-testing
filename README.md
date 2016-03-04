@@ -18,7 +18,7 @@ $ npm install
 ``` text
 $ npm run test:watch
 # or
-$ npm run devtest
+$ npm run test-on-browser
 # open localhost:3001/test in browser
 
 ```
