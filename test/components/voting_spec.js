@@ -1,11 +1,9 @@
 import React from 'react';
 import {findDOMNode} from 'react-dom';
-import TestUtils from 'react-addons-test-utils';
+import { renderIntoDocument, scryRenderedDOMComponentsWithTag, Simulate, createRenderer } from 'react-addons-test-utils';
 import { expect } from 'chai';
 
 import Voting from '../../src/components/voting';
-
-const { renderIntoDocument, scryRenderedDOMComponentsWithTag, Simulate, createRenderer } = TestUtils;
 
 describe('renderIntoDocument testing', () => {
     it('renders a pair of buttons', () =>{
@@ -13,7 +11,6 @@ describe('renderIntoDocument testing', () => {
             <Voting pair={["Trainspotting", "28 Days Later"]} />
         );
         const buttons = scryRenderedDOMComponentsWithTag(component, 'button');
-
         expect(buttons.length).to.equal(2);
         expect(findDOMNode(buttons[0]).textContent).to.equal('Trainspotting');
         expect(findDOMNode(buttons[1]).textContent).to.equal('28 Days Later');
@@ -69,13 +66,32 @@ describe('renderIntoDocument testing', () => {
     });
 });
 
-describe('Shallow Rendering', () => {
+describe('Shallow Rendering testing', () => {
+    let votedWith;
+    const vote = (entry) => votedWith = entry;
+    const renderer = createRenderer();
+    renderer.render(
+        <Voting
+        pair={["Trainspotting", "28 Days Later"]}
+        vote={vote} />
+    );
+    const component = renderer.getRenderOutput();
     it('renders a pair of buttons', () =>{
-        const renderer = createRenderer();
-        renderer.render(<Voting pair={["Trainspotting", "28 Days Later"]} />);
-        const component = renderer.getRenderOutput();
         const childrenPair = component.props.children.props.pair;
         expect(childrenPair.length).to.equal(2);
         expect(childrenPair).to.deep.equal(["Trainspotting", "28 Days Later"]);
+    });
+    it('invokes callback when a button is clicked', () => {
+
+        component.props.children.props.vote();
+        console.log('votedWith', votedWith);
+        // const component = renderIntoDocument(
+        //     <Voting
+        //         pair={["Trainspotting", "28 Days Later"]}
+        //         vote={vote}/>
+        // );
+        // const buttons = scryRenderedDOMComponentsWithTag(component, 'button');
+        // Simulate.click(findDOMNode(buttons[0]));
+        // expect(votedWith).to.equal('Trainspotting');
     });
 })

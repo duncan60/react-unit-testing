@@ -4,7 +4,7 @@
   "description": "pratice react unit-testing",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --compilers js:babel-core/register --require ./test/test_helper.js 'test/**/*.@(js|jsx)'",
+    "test": "mocha --compilers js:babel-core/register --require ./test/test_helper.js",
     "test:watch": "npm run test -- --watch",
     "server": "node server.js",
     "dev-test-on-terminal": "parallelshell 'npm run test:watch' 'npm run server'",
